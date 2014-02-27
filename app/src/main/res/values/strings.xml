@@ -4,5 +4,16 @@
     <string name="app_name">MoveMonitor</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    // Color is ARGB    <color name="red">#FF3366</color>
+    <color name="green">#00FF33</color>
+    <color name="darkgreen">#006633</color>
+    <color name="darkblue">#002EB8</color>
+    <color name="blue">#003DF5</color>
+    <color name="lightblue">#33CCFF</color>
+    <color name="yellow">#A0FFFF00</color>
+    <color name="white">#FFFFFF</color>
+
+
+    <string name="title_activity_history">History</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package edu.sjsu.movemonitor.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,11 +10,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Date;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
+    public static final String LOG_TAG = "edu.sjsu.MoveMonitor.log";
     private SensorManager sensorManager;
-    private int stepCount = 0;
+    private Integer stepCount = 0;
+    private DatabaseAdapter dbAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +34,10 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
+
+
+        dbAdapter = new DatabaseAdapter(this);
+        dbAdapter.open();
     }
 
 
@@ -72,20 +84,48 @@ public class MainActivity extends Activity implements SensorEventListener {
         float accelationSquareRoot = (x * x + y * y + z * z)
                 / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
         long actualTime = System.currentTimeMillis();
-        if (accelationSquareRoot >= 2) //
+        if (accelationSquareRoot >= 2)
         {
             // Turn on camera torch
 
             stepCount++;
-
+            updateScreenCount();
 
         }
     }
 
-    public void stopSensor (View view) {
+    public void stopSensor(View view) {
 
         sensorManager.unregisterListener(this);
 
+    }
+
+    public void resetCount(View view) {
+        stepCount = 0;
+        updateScreenCount();
+    }
+
+    public void updateScreenCount() {
+        TextView view = (TextView)findViewById(R.id.stepCountText);
+        view.setText(Integer.toString(stepCount));
+    }
+
+    public void saveCount(View view) {
+
+        // Date
+        Date date = new Date();
+        // Count
+        TextView countView = (TextView)findViewById(R.id.stepCountText);
+        dbAdapter.addRecord(date.toString(), countView.getText().toString());
+
+        // Reset
+        resetCount(null);
+        Toast.makeText(this, "Count Saved", Toast.LENGTH_LONG).show();
+    }
+
+    public void showHistory(View view) {
+        Intent intent = new Intent(this, History.class);
+        startActivity(intent);
     }
 
 
