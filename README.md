@@ -15,3 +15,6 @@ Written for Android devices.
 1. Backup to cloud service
 2. Graphing
 3. Multiple profiles
+4. More accurate machine-learning of steps
+5. History entry deletion (UI only)
+
